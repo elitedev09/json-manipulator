@@ -33,7 +33,6 @@ function Menu() {
     const todoRef = firebase.database().ref("json");
     todoRef.on("value", (snapshot) => {
       const todos = snapshot.val();
-      console.log("todos", todos);
       setTodoList(todos);
     });
   }, []);
