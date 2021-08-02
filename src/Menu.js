@@ -8,6 +8,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { connect } from "react-redux";
+import firebase from "./util/firebase";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,12 +26,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Menu({ count }) {
+function Menu() {
   const classes = useStyles();
-
-  var menu = count ? count : [];
-  console.log("count", menu);
-  // console.log("menu", menu);
+  const [todoList, setTodoList] = React.useState();
+  useEffect(() => {
+    const todoRef = firebase.database().ref("json");
+    todoRef.on("value", (snapshot) => {
+      const todos = snapshot.val();
+      console.log("todos", todos);
+      setTodoList(todos);
+    });
+  }, []);
+  console.log("todoList", todoList);
+  const menu = todoList ? todoList.mergedArray : [];
 
   return (
     <div className={classes.root}>
@@ -47,43 +55,26 @@ function Menu({ count }) {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  {
-                    item.elements.map((element, k) => (
-                      <div key={k}>
-                        <span style={{ marginRight: "15px" }}>
-                          {element.id}
-                        </span>
-                        <span style={{ marginRight: "15px" }}>
-                          {element.name}
-                        </span>
-                        <span>${element.price / 100}</span>
-                      </div>
-                    ))
-                    // item.elements.map((element, index) => (
-                    //     <p>{element.id}</p>
-                    //     <p>{element.name}</p>
-                    //     <p>{element.price}</p>
-                    // ))
-                  }
-
-                  {/* <p>{item.name}</p>
-                  <p>{item.id}</p>
-                  <p>${item.price_per_unit / 100}</p> */}
+                  {item.elements.map((element, k) => (
+                    <div key={k}>
+                      <span style={{ marginRight: "15px" }}>{element.id}</span>
+                      <span style={{ marginRight: "15px" }}>
+                        {element.name}
+                      </span>
+                      <span>${element.price / 100}</span>
+                    </div>
+                  ))}
                 </Typography>
               </AccordionDetails>
             </Accordion>
           </div>
         ))
       ) : (
-        <div>
-          <p>Empty</p>
-        </div>
+        <div></div>
       )}
       <br></br>
       <br></br>
-      <Route>
-        <Link to="/">Back</Link>
-      </Route>
+      <Route>{menu ? <Link to="/">Back</Link> : ""}</Route>
       <br></br>
       <br></br>
       <br></br>
@@ -91,10 +82,4 @@ function Menu({ count }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    count: state.counter.count ? state.counter.count.count : {},
-  };
-};
-
-export default connect(mapStateToProps)(Menu);
+export default Menu;

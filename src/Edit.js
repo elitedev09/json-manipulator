@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import firebase from "./util/firebase";
 import {
   increaseCounter,
   decreaseCounter,
@@ -26,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App({ count, naturalData }) {
-  console.log("count", count);
-  console.log("naturalData", naturalData);
+  // console.log("count", count);
+  // console.log("naturalData", naturalData);
   const classes = useStyles();
   const dispatch = useDispatch();
   const [value, setValue] = React.useState(naturalData);
@@ -49,7 +50,7 @@ function App({ count, naturalData }) {
       });
     });
     var uniqueCategories = [...new Set(tempCategories)];
-    console.log("uniqueCategories", uniqueCategories);
+    // console.log("uniqueCategories", uniqueCategories);
 
     const tempItems = categories.map((obj, i) => {
       return {
@@ -67,6 +68,18 @@ function App({ count, naturalData }) {
 
     const mergedArray = Object.values(arrayHashmap);
     console.log("mergedArray", mergedArray);
+
+    // const todoRef = firebase.database().ref("json");
+    // const todo = {
+    //   mergedArray,
+    // };
+    // todoRef.push(todo);
+
+    const todoRef = firebase.database().ref("json");
+    todoRef.update({
+      mergedArray,
+    });
+
     dispatch(decreaseCounter({ count: mergedArray }));
     dispatch(increaseCounter({ naturalData: value }));
   };
@@ -76,7 +89,7 @@ function App({ count, naturalData }) {
       <br></br>
       <br></br>
       <br></br>
-      {console.log("value", value)}
+      {/* {console.log("value", value)} */}
       <textarea rows="40" style={{ width: "80%" }} onChange={handleChange}>
         {value ? value : {}}
       </textarea>
