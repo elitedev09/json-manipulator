@@ -36,7 +36,6 @@ function Menu() {
       setTodoList(todos);
     });
   }, []);
-  console.log("todoList", todoList);
   const menu = todoList ? todoList.mergedArray : [];
 
   return (

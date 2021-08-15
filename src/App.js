@@ -40,8 +40,6 @@ function App(props) {
   };
 
   const saveJSONData = () => {
-    console.log("value", value);
-
     dispatch(decreaseCounter({ count: value }));
   };
 

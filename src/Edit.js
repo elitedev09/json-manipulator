@@ -27,8 +27,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App({ count, naturalData }) {
-  // console.log("count", count);
-  // console.log("naturalData", naturalData);
   const classes = useStyles();
   const dispatch = useDispatch();
   const [value, setValue] = React.useState(naturalData);
@@ -50,8 +48,7 @@ function App({ count, naturalData }) {
       });
     });
     var uniqueCategories = [...new Set(tempCategories)];
-    // console.log("uniqueCategories", uniqueCategories);
-
+    tempCategories = tempCategories.sort();
     const tempItems = categories.map((obj, i) => {
       return {
         id: tempCategories[i],
@@ -67,13 +64,6 @@ function App({ count, naturalData }) {
     }, {});
 
     const mergedArray = Object.values(arrayHashmap);
-    console.log("mergedArray", mergedArray);
-
-    // const todoRef = firebase.database().ref("json");
-    // const todo = {
-    //   mergedArray,
-    // };
-    // todoRef.push(todo);
 
     const todoRef = firebase.database().ref("json");
     todoRef.update({
@@ -89,7 +79,6 @@ function App({ count, naturalData }) {
       <br></br>
       <br></br>
       <br></br>
-      {/* {console.log("value", value)} */}
       <textarea rows="40" style={{ width: "80%" }} onChange={handleChange}>
         {value ? value : {}}
       </textarea>
