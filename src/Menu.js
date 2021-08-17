@@ -5,11 +5,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import { connect } from "react-redux";
 import firebase from "./util/firebase";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "30%",

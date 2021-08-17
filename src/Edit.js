@@ -1,36 +1,18 @@
 import React from "react";
-
 import "./App.css";
-
 import { connect, useDispatch } from "react-redux";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import firebase from "./util/firebase";
 import {
-  increaseCounter,
-  decreaseCounter,
-} from "./redux/Counter/counter.actions";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
-  },
-  root1: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
+  saveNaturalData,
+  saveMergedArray,
+} from "./redux/SaveData/data.actions";
 
-function App({ count, naturalData }) {
-  const classes = useStyles();
+function App({ naturalData }) {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState(naturalData);
-
+  const [save, setSave] = React.useState(false);
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -40,14 +22,15 @@ function App({ count, naturalData }) {
     var categories = [];
     var tempCategories = [];
     var init = 0;
-    menu.map((item, index) => {
-      item._embedded.menu_categories.map((element, j) => {
+
+    menu.forEach((item) => {
+      item._embedded.menu_categories.forEach((element) => {
         tempCategories[init] = element.name;
         categories[init] = item;
         init++;
       });
     });
-    var uniqueCategories = [...new Set(tempCategories)];
+
     tempCategories = tempCategories.sort();
     const tempItems = categories.map((obj, i) => {
       return {
@@ -70,8 +53,9 @@ function App({ count, naturalData }) {
       mergedArray,
     });
 
-    dispatch(decreaseCounter({ count: mergedArray }));
-    dispatch(increaseCounter({ naturalData: value }));
+    dispatch(saveNaturalData({ naturalData: value }));
+    dispatch(saveMergedArray({ count: mergedArray }));
+    setSave(true);
   };
 
   return (
@@ -89,11 +73,10 @@ function App({ count, naturalData }) {
         color="primary"
         onClick={() => saveJSONData()}
       >
-        Save
+        {save ? "Saved" : "Save"}
       </Button>
       <br></br>
       <br></br>
-
       <Route>
         <Link to="/menu">Go to Menu</Link>
       </Route>
@@ -103,19 +86,10 @@ function App({ count, naturalData }) {
 
 const mapStateToProps = (state) => {
   return {
-    count: state.counter.count ? state.counter.count.count : [],
-    naturalData: state.counter.naturalData
-      ? state.counter.naturalData.naturalData
+    naturalData: state.data.naturalData
+      ? state.data.naturalData.naturalData
       : [],
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    increaseCounter: () => dispatch(increaseCounter()),
-
-    decreaseCounter: () => dispatch(decreaseCounter()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);
