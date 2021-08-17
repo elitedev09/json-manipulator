@@ -1,13 +1,14 @@
 import firebase from "firebase";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCecFPONmApcb-mDxLKq_d6sMJ3S-F4yL4",
-  authDomain: "json-manipulator.firebaseapp.com",
-  projectId: "json-manipulator",
-  storageBucket: "json-manipulator.appspot.com",
-  messagingSenderId: "82320750519",
-  appId: "1:82320750519:web:99f4913f170aec825fda32",
-  measurementId: "G-R5B0T63E3N",
+var firebaseConfig = {
+  apiKey: "AIzaSyCkkFyZaXprhZqnaBwWB4o89W8dnP8imys",
+  authDomain: "json-manipulation.firebaseapp.com",
+  databaseURL: "https://json-manipulation-default-rtdb.firebaseio.com",
+  projectId: "json-manipulation",
+  storageBucket: "json-manipulation.appspot.com",
+  messagingSenderId: "639605502545",
+  appId: "1:639605502545:web:81bfaa74efa0e88fb53e70",
+  measurementId: "G-8G66MNV44E",
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

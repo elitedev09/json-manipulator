@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { connect, useDispatch } from "react-redux";
 import { Route, Link } from "react-router-dom";
@@ -11,6 +11,16 @@ import {
 
 function App({ naturalData }) {
   const dispatch = useDispatch();
+  const [todoList, setTodoList] = React.useState();
+
+  useEffect(() => {
+    const todoRef = firebase.database().ref("json");
+    todoRef.on("value", (snapshot) => {
+      const todos = snapshot.val();
+      setTodoList(todos);
+    });
+  }, []);
+
   const [value, setValue] = React.useState(naturalData);
   const [save, setSave] = React.useState(false);
   const handleChange = (event) => {
@@ -49,10 +59,18 @@ function App({ naturalData }) {
     const mergedArray = Object.values(arrayHashmap);
 
     const todoRef = firebase.database().ref("json");
-    todoRef.update({
-      mergedArray,
-    });
 
+    todoList
+      ? todoRef.update({
+          mergedArray,
+        })
+      : todoRef.set({
+          mergedArray,
+        });
+
+    // todoRef.update({
+    //   mergedArray,
+    // });
     dispatch(saveNaturalData({ naturalData: value }));
     dispatch(saveMergedArray({ count: mergedArray }));
     setSave(true);
